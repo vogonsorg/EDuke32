@@ -537,7 +537,7 @@ int32_t app_main(int32_t argc, char const * const * argv)
     }
     option[4] = (numplayers >= 2);
 
-    artLoadFiles("tiles000.art",1048576);                      //Load artwork
+    artLoadFiles("tiles%03i.art",1048576);                      //Load artwork
     Ken_LoadVoxels();
     if (!loaddefinitionsfile(G_DefFile())) buildputs("Definitions file loaded.\n");
 
