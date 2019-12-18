@@ -1386,6 +1386,9 @@ static int32_t defsparser(scriptfile *script)
             if (EDUKE32_PREDICT_FALSE(scriptfile_getstring(script,&fn)))
                 break; //voxel filename
 
+            while (nextvoxid < MAXVOXELS && (voxreserve[nextvoxid>>3]&(1<<(nextvoxid&7))))
+                nextvoxid++;
+
             if (EDUKE32_PREDICT_FALSE(nextvoxid == MAXVOXELS))
             {
                 initprintf("Maximum number of voxels (%d) already defined.\n", MAXVOXELS);
@@ -1919,6 +1922,9 @@ static int32_t defsparser(scriptfile *script)
                 break; //voxel filename
 
             if (scriptfile_getbraces(script,&voxelend)) break;
+
+            while (nextvoxid < MAXVOXELS && (voxreserve[nextvoxid>>3]&(1<<(nextvoxid&7))))
+                nextvoxid++;
 
             if (EDUKE32_PREDICT_FALSE(nextvoxid == MAXVOXELS))
             {
