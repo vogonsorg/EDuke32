@@ -2323,7 +2323,7 @@ static void prepwall(int32_t z, uwallptr_t wal)
 //
 // animateoffs (internal)
 //
-int32_t animateoffs(int const tilenum)
+int32_t animateoffs(int const tilenum, int fakevar)
 {
     int const animnum = picanm[tilenum].num;
 
@@ -9031,16 +9031,16 @@ int32_t renderDrawRoomsQ16(int32_t daposx, int32_t daposy, int32_t daposz,
         if (wall[i].cstat & CSTAT_WALL_ROTATE_90)
         {
             auto &w    = wall[i];
-            auto &tile = rottile[w.picnum+animateoffs(w.picnum)];
+            auto &tile = rottile[w.picnum+animateoffs(w.picnum,16384)];
 
             if (tile.newtile == -1 && tile.owner == -1)
             {
                 tile.newtile = findUnusedTile();
                 Bassert(tile.newtile != -1);
 
-                rottile[tile.newtile].owner = w.picnum+animateoffs(w.picnum);
+                rottile[tile.newtile].owner = w.picnum+animateoffs(w.picnum,16384);
 
-                auto &siz  = tilesiz[w.picnum+animateoffs(w.picnum)];
+                auto &siz  = tilesiz[w.picnum+animateoffs(w.picnum,16384)];
                 tileSetSize(tile.newtile, siz.x, siz.y);
 
                 tileLoad(tile.newtile);
