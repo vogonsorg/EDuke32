@@ -123,6 +123,7 @@ enum scripttoken_t
     T_LOCALIZATION, T_STRING,
     T_TILEFONT, T_CHARACTER,
     T_TRUENPOT,
+    T_RFFDEFINEID,
     T_STUB_INTEGER, T_STUB_BRACES, T_STUB_STRING_BRACES,
 };
 
@@ -402,6 +403,7 @@ static int32_t defsparser(scriptfile *script)
         { "shadefactor",     T_SHADEFACTOR      },
         { "localization",    T_LOCALIZATION     },
         { "tilefont",        T_TILEFONT         },
+        { "rffdefineid",     T_RFFDEFINEID      },  // dummy
 
         // stubs for game-side tokens
         { "globalgameflags", T_STUB_INTEGER     },
@@ -3691,6 +3693,22 @@ static int32_t defsparser(scriptfile *script)
 
             if (id0 == 0)
                 paletteloaded &= ~PALETTE_TRANSLUC;
+        }
+        break;
+
+        case T_RFFDEFINEID:
+        {
+            char *dummy;
+            int dummy2;
+
+            if (scriptfile_getstring(script, &dummy))
+                break;
+            if (scriptfile_getstring(script, &dummy))
+                break;
+            if (scriptfile_getnumber(script, &dummy2))
+                break;
+            if (scriptfile_getstring(script, &dummy))
+                break;
         }
         break;
 
