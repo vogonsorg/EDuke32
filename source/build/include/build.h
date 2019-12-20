@@ -1598,6 +1598,7 @@ extern GrowArray<char *> g_clipMapFiles;
 EXTERN int32_t nextvoxid;
 EXTERN intptr_t voxoff[MAXVOXELS][MAXVOXMIPS]; // used in KenBuild
 EXTERN int8_t voxreserve[(MAXVOXELS+7)>>3];
+EXTERN int8_t voxrotate[(MAXVOXELS+7)>>3];
 
 #ifdef USE_OPENGL
 // TODO: dynamically allocate this
