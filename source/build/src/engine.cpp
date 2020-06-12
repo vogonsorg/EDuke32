@@ -203,6 +203,7 @@ classicht_t classicht[MAXTILES];
 
 classicht_t *classic_hightile(int dapicnum)
 {
+#ifdef USE_OPENGL
     classicht_t *cht = &classicht[dapicnum];
     hicreplctyp *si = usehightile ? hicfindsubst(dapicnum, 0, 0) : NULL;
     if (!si || !(si->flags & HICR_INDEXED))
@@ -276,6 +277,9 @@ classicht_t *classic_hightile(int dapicnum)
         cht->lock = CACHE1D_UNLOCKED;
 
     return cht;
+#else
+    return NULL;
+#endif
 }
 
 static classicht_t *globalht;
