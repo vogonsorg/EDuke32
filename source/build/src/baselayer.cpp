@@ -435,7 +435,6 @@ void fill_glinfo(void)
 
     glinfo.bgra             = !!Bstrstr(glinfo.extensions, "GL_EXT_bgra");
     glinfo.bufferstorage    = !!Bstrstr(glinfo.extensions, "GL_ARB_buffer_storage");
-    glinfo.clamptoedge      = !!Bstrstr(glinfo.extensions, "GL_EXT_texture_edge_clamp") || !!Bstrstr(glinfo.extensions, "GL_SGIS_texture_edge_clamp");
     glinfo.debugoutput      = !!Bstrstr(glinfo.extensions, "GL_ARB_debug_output");
     glinfo.depthclamp       = !!Bstrstr(glinfo.extensions, "GL_ARB_depth_clamp");
     glinfo.glsl             = !!Bstrstr(glinfo.extensions, "GL_ARB_shader_objects");
@@ -445,7 +444,6 @@ void fill_glinfo(void)
     glinfo.samplerobjects   = !!Bstrstr(glinfo.extensions, "GL_ARB_sampler_objects");
     glinfo.sync             = !!Bstrstr(glinfo.extensions, "GL_ARB_sync");
     glinfo.texcompr         = !!Bstrstr(glinfo.extensions, "GL_ARB_texture_compression") && Bstrcmp(glinfo.vendor, "ATI Technologies Inc.");
-    glinfo.vbos             = !!Bstrstr(glinfo.extensions, "GL_ARB_vertex_buffer_object");
     glinfo.vsync            = !!Bstrstr(glinfo.extensions, "WGL_EXT_swap_control") || !!Bstrstr(glinfo.extensions, "GLX_EXT_swap_control");
 
 # ifdef DYNAMIC_GLEXT
@@ -574,7 +572,6 @@ int osdcmd_glinfo(osdcmdptr_t UNUSED(parm))
 
     OSD_Printf(" BGRA textures:           %s\n", SUPPORTED(glinfo.bgra));
     OSD_Printf(" Buffer storage:          %s\n", SUPPORTED(glinfo.bufferstorage));
-    OSD_Printf(" Clamp-to-edge:           %s\n", SUPPORTED(glinfo.clamptoedge));
     OSD_Printf(" Debug output:            %s\n", SUPPORTED(glinfo.debugoutput));
     OSD_Printf(" Depth textures:          %s\n", SUPPORTED(glinfo.depthtex));
     OSD_Printf(" Frame buffer objects:    %s\n", SUPPORTED(glinfo.fbos));
@@ -588,7 +585,6 @@ int osdcmd_glinfo(osdcmdptr_t UNUSED(parm))
     OSD_Printf(" Shadow textures:         %s\n", SUPPORTED(glinfo.shadow));
     OSD_Printf(" Sync:                    %s\n", SUPPORTED(glinfo.sync));
     OSD_Printf(" Texture compression:     %s\n", SUPPORTED(glinfo.texcompr));
-    OSD_Printf(" Vertex buffer objects:   %s\n", SUPPORTED(glinfo.vbos));
 
     if (GLVersion.major)
         OSD_Printf(" GL context version:      %d.%d\n", GLVersion.major, GLVersion.minor);
