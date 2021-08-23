@@ -124,6 +124,7 @@ enum scripttoken_t
     T_TILEFONT, T_CHARACTER,
     T_TRUENPOT,
     T_RFFDEFINEID,
+    T_EXTRA,
     T_STUB_INTEGER, T_STUB_BRACES, T_STUB_STRING_BRACES,
 };
 
@@ -805,7 +806,7 @@ static int32_t defsparser(scriptfile *script)
             char *texturetokptr = script->ltextptr, *textureend, *fn = NULL;
             int32_t tile = -1;
             int32_t alphacut = 255, flags = 0;
-            int32_t havexoffset = 0, haveyoffset = 0;
+            int32_t havexoffset = 0, haveyoffset = 0, haveextra = 0;
             int32_t xoffset = 0, yoffset = 0;
             int32_t istexture = 0;
             int32_t tile_crc32 = 0;
@@ -813,6 +814,7 @@ static int32_t defsparser(scriptfile *script)
             uint8_t have_crc32 = 0;
             uint8_t have_size = 0;
             uint8_t tile_flags = 0;
+            int32_t extra = 0;
 
             static const tokenlist tilefromtexturetokens[] =
             {
@@ -829,6 +831,7 @@ static int32_t defsparser(scriptfile *script)
                 { "ifcrc",           T_IFCRC },
                 { "ifmatch",         T_IFMATCH },
                 { "truenpot",        T_TRUENPOT },
+                { "extra",           T_EXTRA },
             };
 
             if (scriptfile_getsymbol(script,&tile)) break;
@@ -902,6 +905,10 @@ static int32_t defsparser(scriptfile *script)
                 case T_TEXTURE:
                     istexture = 1;
                     break;
+                case T_EXTRA:
+                    haveextra = 1;
+                    scriptfile_getsymbol(script, &extra);
+                    break;
                 default:
                     break;
                 }
@@ -956,8 +963,10 @@ static int32_t defsparser(scriptfile *script)
                     picanm[tile].xofs = xoffset;
                 if (haveyoffset)
                     picanm[tile].yofs = yoffset;
+                if (haveextra)
+                    picanm[tile].extra = extra;
 
-                if (EDUKE32_PREDICT_FALSE(flags == 0 && !havexoffset && !haveyoffset))
+                if (EDUKE32_PREDICT_FALSE(flags == 0 && !havexoffset && !haveyoffset && !haveextra))
                     initprintf("\nError: missing 'file name' for tilefromtexture definition near line %s:%d",
                                script->filename, scriptfile_getlinum(script,texturetokptr));
                 break;
@@ -986,6 +995,9 @@ static int32_t defsparser(scriptfile *script)
                 picanm[tile].yofs = yoffset;
             else if (texstatus == 0)
                 picanm[tile].yofs = 0;
+
+            if (haveextra)
+                picanm[tile].extra = extra;
         }
         break;
         case T_COPYTILE:
