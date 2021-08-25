@@ -1049,6 +1049,7 @@ EXTERN uint16_t h_xsize[MAXTILES], h_ysize[MAXTILES];
 EXTERN int8_t h_xoffs[MAXTILES], h_yoffs[MAXTILES];
 
 EXTERN char *globalpalwritten;
+EXTERN int16_t globalpicnum;
 
 enum {
     GLOBAL_NO_GL_TILESHADES = 1<<0,
@@ -1556,7 +1557,6 @@ extern int32_t benchmarkScreenshot;
 extern int32_t glanisotropy;
 extern int32_t glusetexcompr;
 extern int32_t gltexfiltermode;
-extern int32_t r_useindexedcolortextures;
 
 enum {
     TEXFILTER_OFF = 0, // GL_NEAREST
@@ -1569,21 +1569,6 @@ extern int32_t gltexmaxsize;
 void gltexapplyprops (void);
 void texcache_invalidate(void);
 
-# ifdef USE_GLEXT
-extern int32_t r_detailmapping;
-extern int32_t r_glowmapping;
-# endif
-
-extern int32_t r_vertexarrays;
-# ifdef USE_GLEXT
-extern int32_t r_vbocount;
-# endif
-extern int32_t r_animsmoothing;
-extern int32_t r_parallaxskyclamping;
-extern int32_t r_parallaxskypanning;
-extern int32_t r_fullbrights;
-extern int32_t r_downsize;
-extern int32_t r_downsizevar;
 extern int32_t mdtims, omdtims;
 extern int32_t glrendmode;
 #endif
