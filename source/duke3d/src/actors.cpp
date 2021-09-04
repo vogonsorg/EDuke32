@@ -8581,6 +8581,8 @@ static void G_DoEffectorLights(void)  // STATNUM 14
 
     for (SPRITES_OF(STAT_LIGHT, i))
     {
+        dukeMaybeDrawFrame();
+
         switch (sprite[i].lotag)
         {
 #ifdef POLYMER
