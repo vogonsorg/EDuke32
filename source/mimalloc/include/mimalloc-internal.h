@@ -32,6 +32,10 @@ terms of the MIT license. A copy of the license can be found in the file
 #define mi_decl_cache_align
 #endif
 
+#if defined(__EMSCRIPTEN__) && !defined(__wasi__)
+#define __wasi__
+#endif
+
 // "options.c"
 void       _mi_fputs(mi_output_fun* out, void* arg, const char* prefix, const char* message);
 void       _mi_fprintf(mi_output_fun* out, void* arg, const char* fmt, ...);
@@ -46,14 +50,14 @@ void       _mi_random_init(mi_random_ctx_t* ctx);
 void       _mi_random_split(mi_random_ctx_t* ctx, mi_random_ctx_t* new_ctx);
 uintptr_t  _mi_random_next(mi_random_ctx_t* ctx);
 uintptr_t  _mi_heap_random_next(mi_heap_t* heap);
-uintptr_t  _os_random_weak(uintptr_t extra_seed);
+uintptr_t  _mi_os_random_weak(uintptr_t extra_seed);
 static inline uintptr_t _mi_random_shuffle(uintptr_t x);
 
 // init.c
 extern mi_decl_cache_align mi_stats_t       _mi_stats_main;
 extern mi_decl_cache_align const mi_page_t  _mi_page_empty;
 bool       _mi_is_main_thread(void);
-bool       _mi_preloading();  // true while the C runtime is not ready
+bool       _mi_preloading(void);  // true while the C runtime is not ready
 
 // os.c
 size_t     _mi_os_page_size(void);
@@ -427,7 +431,7 @@ static inline mi_page_t* _mi_ptr_page(void* p) {
   return _mi_segment_page_of(_mi_ptr_segment(p), p);
 }
 
-// Get the block size of a page (special cased for huge objects)
+// Get the block size of a page (special case for huge objects)
 static inline size_t mi_page_block_size(const mi_page_t* page) {
   const size_t bsize = page->xblock_size;
   mi_assert_internal(bsize > 0);

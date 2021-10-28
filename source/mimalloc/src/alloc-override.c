@@ -13,7 +13,7 @@ terms of the MIT license. A copy of the license can be found in the file
 #error "It is only possible to override "malloc" on Windows when building as a DLL (and linking the C runtime as a DLL)"
 #endif
 
-#if defined(MI_MALLOC_OVERRIDE) && !(defined(_WIN32)) // || (defined(__APPLE__) && !defined(MI_INTERPOSE)))
+#if defined(MI_MALLOC_OVERRIDE) && !(defined(_WIN32)) // || (defined(__APPLE__) && !defined(MI_OSX_INTERPOSE)))
 
 // ------------------------------------------------------
 // Override system malloc
@@ -22,6 +22,7 @@ terms of the MIT license. A copy of the license can be found in the file
 #if (defined(__GNUC__) || defined(__clang__)) && !defined(__APPLE__)
   // use aliasing to alias the exported function to one of our `mi_` functions
   #if (defined(__GNUC__) && __GNUC__ >= 9)
+    #pragma GCC diagnostic ignored "-Wattributes"  // or we get warnings that nodiscard is ignored on a forward
     #define MI_FORWARD(fun)      __attribute__((alias(#fun), used, visibility("default"), copy(fun)));
   #else
     #define MI_FORWARD(fun)      __attribute__((alias(#fun), used, visibility("default")));
@@ -40,7 +41,7 @@ terms of the MIT license. A copy of the license can be found in the file
   #define MI_FORWARD02(fun,x,y)   { fun(x,y); }
 #endif
 
-#if defined(__APPLE__) && defined(MI_SHARED_LIB_EXPORT) && defined(MI_INTERPOSE)
+#if defined(__APPLE__) && defined(MI_SHARED_LIB_EXPORT) && defined(MI_OSX_INTERPOSE)
   // use interposing so `DYLD_INSERT_LIBRARIES` works without `DYLD_FORCE_FLAT_NAMESPACE=1`
   // See: <https://books.google.com/books?id=K8vUkpOXhN4C&pg=PA73>
   struct mi_interpose_s {
@@ -173,7 +174,7 @@ extern "C" {
 void   cfree(void* p)                    MI_FORWARD0(mi_free, p)
 void*  reallocf(void* p, size_t newsize) MI_FORWARD2(mi_reallocf,p,newsize)
 size_t malloc_size(const void* p)        MI_FORWARD1(mi_usable_size,p)
-#if !defined(__ANDROID__)
+#if !defined(__ANDROID__) && !defined(__FreeBSD__)
 size_t malloc_usable_size(void *p)       MI_FORWARD1(mi_usable_size,p)
 #else
 size_t malloc_usable_size(const void *p) MI_FORWARD1(mi_usable_size,p)
